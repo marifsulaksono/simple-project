@@ -1,0 +1,116 @@
+<!-- calculator.html – simple modern calculator -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Simple Calculator</title>
+    <style>
+      /* Dark theme (primary) */
+      body {
+        background-color: #121212; /* almost black */
+        color: #e0e0e0; /* light text */
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      .calc {
+        background-color: #1e1e1e;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        width: 320px;
+      }
+      .display {
+        background: #2c2c2c;
+        padding: 10px;
+        border-radius: 6px;
+        text-align: right;
+        font-size: 1.5rem;
+        overflow-x: auto;
+      }
+      .buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-top: 10px;
+      }
+      button {
+        background-color: #ff9800; /* orange secondary */
+        border: none;
+        border-radius: 6px;
+        font-size: 1.2rem;
+        padding: 15px;
+        color: #212121;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      button:hover {
+        background-color: #e68900;
+      }
+      .operator {
+        background-color: #ffb74d;
+      }
+      .wide {
+        grid-column: span 2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calc">
+      <div id="display" class="display">0</div>
+      <div class="buttons">
+        <button class="wide" onclick="clearDisplay()">C</button>
+        <button onclick="append('(')">(</button>
+        <button onclick="append(')')">)</button>
+        <button class="operator" onclick="append('/')">÷</button>
+
+        <button onclick="append('7')">7</button>
+        <button onclick="append('8')">8</button>
+        <button onclick="append('9')">9</button>
+        <button class="operator" onclick="append('*')">×</button>
+
+        <button onclick="append('4')">4</button>
+        <button onclick="append('5')">5</button>
+        <button onclick="append('6')">6</button>
+        <button class="operator" onclick="append('-')">‑</button>
+
+        <button onclick="append('1')">1</button>
+        <button onclick="append('2')">2</button>
+        <button onclick="append('3')">3</button>
+        <button class="operator" onclick="append('+')">+</button>
+
+        <button class="wide" onclick="append('0')">0</button>
+        <button onclick="append('.')">.</button>
+        <button class="operator" onclick="calculate()">=</button>
+      </div>
+    </div>
+
+    <script>
+      const display = document.getElementById("display");
+      function append(val) {
+        if (display.textContent === "0" && val !== ".")
+          display.textContent = "";
+        display.textContent += val;
+      }
+      function clearDisplay() {
+        display.textContent = "0";
+      }
+      function calculate() {
+        try {
+          // Evaluate the expression safely – replace ÷ and × with operators
+          const expr = display.textContent
+            .replace(/÷/g, "/")
+            .replace(/×/g, "*");
+          // Using Function constructor for simple eval (acceptable in learning context)
+          const result = Function('"use strict";return (' + expr + ")")();
+          display.textContent = Number.isFinite(result) ? result : "Error";
+        } catch (e) {
+          display.textContent = "Error";
+        }
+      }
+    </script>
+  </body>
+</html>
